@@ -1,0 +1,35 @@
+{
+	"name": "@ghasemkiani/doxer",
+	"version": "1.0.0",
+	"description": "A simple document processor",
+	"type": "module",
+	"main": "index.js",
+	"bin": {
+		"gkdox": "./bin/gkdox.js"
+	},
+	"scripts": {},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ghasemkiani/doxer.git"
+	},
+	"keywords": [
+		"xml",
+		"dox",
+		"document"
+	],
+	"author": "Ghasem Kiani",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ghasemkiani/doxer/issues"
+	},
+	"homepage": "https://github.com/ghasemkiani/doxer#readme",
+	"dependencies": {
+		"@ghasemkiani/base": "github:ghasemkiani/base",
+		"@ghasemkiani/base-app": "github:ghasemkiani/base-app",
+		"@ghasemkiani/dox": "github:ghasemkiani/dox",
+		"@ghasemkiani/dox-cmn": "github:ghasemkiani/dox-cmn",
+		"@ghasemkiani/wjsdom": "github:ghasemkiani/wjsdom",
+		"chalk": "^2.4.1",
+		"dateformat": "^3.0.3"
+	}
+}
