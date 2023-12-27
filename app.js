@@ -41,6 +41,7 @@ class App extends cutil.mixin(AppBase, storable) {
 				//
 			},
 			_renderer: null,
+			verbose: null,
 		});
 	}
 	async toDefineInitOptions() {
@@ -49,18 +50,22 @@ class App extends cutil.mixin(AppBase, storable) {
 		app.commander.description("A simple document processor");
 		app.commander.argument("<paths...>", "one or more files to process");
 		app.commander.option("--clear", "Clear all prefs");
+		app.commander.option("-v, --verbose", "Verbose output");
 	}
 	async toApplyInitOptions() {
 		await super.toApplyInitOptions();
 		let app = this;
-		if (app.commander.clear) {
+		let opts = this.commander.opts();
+		if (opts.clear) {
 			app.prefs.clear();
 			cutil.assign(app.prefs, app.defaultPrefs);
 			app.prefs.save();
 		}
+		app.verbose = opts.verbose;
 		await app.toProcess({paths: app.commander.args});
 	}
 	async toProcess({paths}) {
+		let app = this;
 		for (let fn of paths) {
 			fn = fs.realpathSync(fn);
 			let {dir: dirname, base: fname, name, ext} = path.parse(fn);
@@ -72,12 +77,17 @@ class App extends cutil.mixin(AppBase, storable) {
 				},
 			});
 			try {
-				await renderer.toRender(new WDocument({fn: path.join(dirname, "index.xml")}).read().root);
+				let fn = path.join(dirname, "index.xml");
+				if (fs.existsSync(fn)) {
+					await renderer.toRender(new WDocument({fn}).read().root);
+				}
 			} catch(e) {
 				console.log(e.message);
 			}
 			await renderer.toRender(new WDocument({fn}).read().root);
-			console.log(wdocument.root.string);
+			if (app.verbose) {
+				console.log(wdocument.root.string);
+			}
 		}
 	}
 }
