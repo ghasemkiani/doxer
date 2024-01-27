@@ -5,9 +5,11 @@ import dateformat from "dateformat";
 import chalk from "chalk";
 
 import {cutil} from "@ghasemkiani/base";
+import {Textual} from "@ghasemkiani/base";
 import {storable} from "@ghasemkiani/base-app";
 import {App as AppBase} from "@ghasemkiani/base-app";
-import {WDocument} from "@ghasemkiani/wjsdom";
+import {iwx} from "@ghasemkiani/xdom";
+import {iwjsdom} from "@ghasemkiani/jsdom";
 import {Context as ContextBase} from "@ghasemkiani/dox";
 import {Renderer as RendererBase} from "@ghasemkiani/dox";
 import {tags as tagsCmn} from "@ghasemkiani/dox-cmn";
@@ -33,14 +35,13 @@ class Renderer extends RendererBase {
 	}
 }
 
-class App extends cutil.mixin(AppBase, storable) {
+class App extends cutil.mixin(AppBase, storable, iwx, iwjsdom) {
 	static {
 		cutil.extend(this.prototype, {
 			prefsId: "doxer",
 			defaultPrefs: {
 				//
 			},
-			_renderer: null,
 			verbose: null,
 		});
 	}
@@ -66,12 +67,12 @@ class App extends cutil.mixin(AppBase, storable) {
 	}
 	async toProcess({paths}) {
 		let app = this;
+		let {x} = app;
 		for (let fn of paths) {
 			fn = fs.realpathSync(fn);
 			let {dir: dirname, base: fname, name, ext} = path.parse(fn);
-			let wdocument = new WDocument();
 			let renderer = new Renderer({
-				wdocument,
+				x,
 				setupContext(context) {
 					cutil.assign(context, {dirname, fname});
 				},
@@ -79,14 +80,14 @@ class App extends cutil.mixin(AppBase, storable) {
 			try {
 				let fn = path.join(dirname, "index.xml");
 				if (fs.existsSync(fn)) {
-					await renderer.toRender(new WDocument({fn}).read().root);
+					await renderer.toRender(x.root(x.fromStr(new Textual({fn}).read().string)));
 				}
 			} catch(e) {
 				console.log(e.message);
 			}
-			await renderer.toRender(new WDocument({fn}).read().root);
+			await renderer.toRender(x.root(x.fromStr(new Textual({fn}).read().string)));
 			if (app.verbose) {
-				console.log(wdocument.root.string);
+				console.log(x.toStr(x.doc()));
 			}
 		}
 	}

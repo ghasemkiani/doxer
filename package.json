@@ -1,9 +1,12 @@
 {
 	"name": "@ghasemkiani/doxer",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "A simple document processor",
 	"type": "module",
 	"main": "index.js",
+	"exports": {
+		".": "./index.js"
+	},
 	"bin": {
 		"gkdox": "./bin/gkdox.js"
 	},
@@ -28,7 +31,8 @@
 		"@ghasemkiani/base-app": "github:ghasemkiani/base-app",
 		"@ghasemkiani/dox": "github:ghasemkiani/dox",
 		"@ghasemkiani/dox-cmn": "github:ghasemkiani/dox-cmn",
-		"@ghasemkiani/wjsdom": "github:ghasemkiani/wjsdom",
+		"@ghasemkiani/xdom": "github:ghasemkiani/xdom",
+		"@ghasemkiani/jsdom": "github:ghasemkiani/jsdom",
 		"chalk": "^2.4.1",
 		"dateformat": "^3.0.3"
 	}
