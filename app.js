@@ -62,7 +62,7 @@ class App extends cutil.mixin(AppBase, storable, iwx, iwjsdom) {
 			cutil.assign(app.prefs, app.defaultPrefs);
 			app.prefs.save();
 		}
-		app.verbose = opts.verbose;
+		app.verbose = !!opts.verbose;
 		await app.toProcess({paths: app.commander.args});
 	}
 	async toProcess({paths}) {
@@ -85,6 +85,7 @@ class App extends cutil.mixin(AppBase, storable, iwx, iwjsdom) {
 			} catch(e) {
 				console.log(e.message);
 			}
+			
 			await renderer.toRender(x.root(x.fromStr(new Textual({fn}).read().string)));
 			if (app.verbose) {
 				console.log(x.toStr(x.doc()));
