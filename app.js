@@ -77,16 +77,17 @@ class App extends cutil.mixin(AppBase, storable, iwx, iwjsdom) {
 					cutil.assign(context, {dirname, fname});
 				},
 			});
+			let context;
 			try {
 				let fn = path.join(dirname, "index.xml");
 				if (fs.existsSync(fn)) {
-					await renderer.toRender(x.root(x.fromStr(new Textual({fn}).read().string)));
+					context = await renderer.toRender(x.root(x.fromStr(new Textual({fn}).read().string)));
 				}
 			} catch(e) {
 				console.log(e.message);
 			}
 			
-			await renderer.toRender(x.root(x.fromStr(new Textual({fn}).read().string)));
+			await renderer.toRender(x.root(x.fromStr(new Textual({fn}).read().string)), context);
 			if (app.verbose) {
 				console.log(x.toStr(x.doc()));
 			}
