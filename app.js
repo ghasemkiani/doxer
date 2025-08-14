@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import url from "node:url";
 
 import dateformat from "dateformat";
 import chalk from "chalk";
@@ -74,7 +75,13 @@ class App extends cutil.mixin(AppBase, storable, iwx, iwjsdom) {
 			let renderer = new Renderer({
 				x,
 				setupContext(context) {
-					cutil.assign(context, {dirname, fname});
+					cutil.assign(context, {
+            dirname,
+            fname,
+            resolve(uri) {
+              return url.pathToFileURL(path.join(this.dirname, uri));
+            },
+          });
 				},
 			});
 			let context;
